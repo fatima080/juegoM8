@@ -6,4 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".Splash">
 
+    <FrameLayout
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="282dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/imagendiferencia"
+            android:layout_marginTop="80dp"
+            />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
