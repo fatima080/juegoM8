@@ -1,5 +1,6 @@
 package com.example.juegoM8
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         }
         REGISTRO.setOnClickListener(){
             Toast.makeText(this, "click boton Registro",Toast.LENGTH_LONG).show();
+            val intent = Intent(this, Registro::class.java)
+            startActivity(intent)
         }
 }
 }

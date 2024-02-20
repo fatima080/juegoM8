@@ -1,4 +1,4 @@
-package com.example.montserratak
+package com.example.juegoM8
 
 import org.junit.Test
 

@@ -1,15 +1,15 @@
 plugins {
     id("com.android.application")
-    //id("com.google.gms.google-services")
+    id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.example.montserratak"
+    namespace = "com.example.juegoM8"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.montserratak"
+        applicationId = "com.example.juegoM8"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -47,4 +47,18 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+
+    // Add the dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // For example, add the dependencies for Firebase Authentication and Cloud Firestore
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    // Database
+    implementation ("com.google.firebase:firebase-database-ktx")
 }

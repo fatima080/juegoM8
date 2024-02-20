@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Montserratak"
+rootProject.name = "juegoM8"
 include(":app")
  

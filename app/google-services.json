@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "21053802879",
-    "project_id": "montserratak-52d60",
-    "storage_bucket": "montserratak-52d60.appspot.com"
+    "project_number": "517283616254",
+    "project_id": "juegom8-d97f7",
+    "storage_bucket": "juegom8-d97f7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:21053802879:android:8ba61c41c48048b2e4b24a",
+        "mobilesdk_app_id": "1:517283616254:android:6503b3cdf71ac938eedcaf",
         "android_client_info": {
-          "package_name": "com.example.montserratak"
+          "package_name": "com.example.juegoM8"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDSy42tjtaDjJIJ_bHMC-5P6KXGAd17jNQ"
+          "current_key": "AIzaSyCl58-h6IooXMKZQ3EDAYxkxKQXhhfFv8A"
         }
       ],
       "services": {
