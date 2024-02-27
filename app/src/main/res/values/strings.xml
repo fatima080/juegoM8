@@ -7,4 +7,19 @@
     <string name="pass">Password</string>
     <string name="fecha">Fecha</string>
     <string name="Registrar">REGISTRAR</string>
+    <string name="correoLogin">E-mail</string>
+    <string name="passLogin">Password</string>
+    <string name="BtnLogin">ENTRAR</string>
+    <string name="tancarSessio">Tancar Sessió</string>
+
+    <string name="miPuntuaciotxt">Puntuació</string>
+    <string name="puntuacio"> -- </string>
+    <string name="uid"> -- </string>
+    <string name="correo2"> -- </string>
+    <string name="nom"> -- </string>
+    <string name="MenuTxt">MENÚ</string>
+    <string name="jugarBtn">Jugar</string>
+    <string name="PuntuacionsBtn">Puntuacions</string>
+    <string name="CreditsBtn">Crèdits</string>
+
 </resources>

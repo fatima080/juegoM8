@@ -1,5 +1,7 @@
 package com.example.juegoM8
 
+import android.content.Intent
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
@@ -42,6 +44,12 @@ class Registro : AppCompatActivity() {
         val formatedDate = formatter.format(date)
         //ara la mostrem al TextView
         fecha.text = formatedDate
+        val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
+        correo.setTypeface(tf)
+        pass.setTypeface(tf)
+        nombre.setTypeface(tf)
+        fecha.setTypeface(tf)
+        Registrar.setTypeface(tf)
 
         //Instanciem el firebaseAuth
         auth = FirebaseAuth.getInstance()
@@ -89,6 +97,7 @@ class Registro : AppCompatActivity() {
             var passString: String = pass.getText().toString()
             var nombreString: String = nombre.getText().toString()
             var fechaString: String= fecha.getText().toString()
+            var nivell: String = "1"
             var dadesJugador : HashMap<String,String> = HashMap<String, String>()
             dadesJugador.put ("Uid",uidString)
             dadesJugador.put ("Email",correoString)
@@ -96,14 +105,19 @@ class Registro : AppCompatActivity() {
             dadesJugador.put ("Nom",nombreString)
             dadesJugador.put ("Data",fechaString)
             dadesJugador.put ("Puntuacio", puntuacio.toString())
+            dadesJugador.put ("Nivell", nivell)
             // Creem un punter a la base de dades i li donem un nom
             var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
             var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
             if(reference!=null) {
                 //crea un fill amb els valors de dadesJugador
+                //Log.i ("MYTAG", reference.toString())
+                //Log.i ("MYTAG", uidString)
+                //Log.i ("MYTAG", dadesJugador.toString())
                 reference.child(uidString).setValue(dadesJugador)
-                Toast.makeText(this, "USUARI BEN REGISTRAT",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "USUARI BEN REGISTRAT", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Menu::class.java)
+                startActivity(intent)
             }
             else{
                 Toast.makeText(this, "ERROR BD", Toast.LENGTH_SHORT).show()
