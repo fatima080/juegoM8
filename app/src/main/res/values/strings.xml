@@ -21,5 +21,8 @@
     <string name="jugarBtn">Jugar</string>
     <string name="PuntuacionsBtn">Puntuacions</string>
     <string name="CreditsBtn">Crèdits</string>
+    <string name="continuarBtn">Continuar</string>
+    <string name="movimientos">MOVIMIENTOS</string>
+    <string name="puntos">--</string>
 
 </resources>

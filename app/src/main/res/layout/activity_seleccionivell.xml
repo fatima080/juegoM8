@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         android:scaleType ="fitXY"
-        app:srcCompat="@drawable/fondopuzzle" />
+        app:srcCompat="@drawable/imagendiferencia" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -31,7 +31,7 @@
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/nivela" />
+        app:srcCompat="@drawable/uno" />
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="@+id/fondomontse"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.526"
-        app:srcCompat="@drawable/nivelb" />
+        app:srcCompat="@drawable/dos" />
 
     <ImageButton
         android:id="@+id/imageButton3"
@@ -56,6 +56,6 @@
         android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/nivelc" />
+        app:srcCompat="@drawable/tres" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

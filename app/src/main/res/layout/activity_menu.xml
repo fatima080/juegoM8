@@ -34,8 +34,8 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="180dp"
             android:layout_height="180dp"
-            android:id="@+id/alienimagen"
-            android:src="@drawable/puntopuzzle" />
+            android:id="@+id/fireworks"
+            android:src="@drawable/fireworks" />
         <!-- uid -->
         <TextView
             android:layout_width="match_parent"

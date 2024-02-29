@@ -1,11 +1,13 @@
 package com.example.juegoM8
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
+import com.example.juegoM8.Nivel1
 
 class seleccionivell : AppCompatActivity() {
     private var NOM: String =""
@@ -55,6 +57,15 @@ class seleccionivell : AppCompatActivity() {
             Toast.makeText(this,"NIVELL 3",Toast.LENGTH_LONG).show()
             imageButton3.isEnabled=true
             imageButton3.visibility =View.VISIBLE
+        }
+        imageButton1.setOnClickListener(){
+            val intent = Intent(this, Nivel1::class.java)
+            intent.putExtra("UID",UID)
+            intent.putExtra("NOM",NOM)
+            intent.putExtra("PUNTUACIO",PUNTUACIO)
+            intent.putExtra("NIVELL",NIVELL)
+            startActivity(intent)
+            finish()
         }
 
     }
