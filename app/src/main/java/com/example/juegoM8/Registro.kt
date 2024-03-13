@@ -25,6 +25,8 @@ class Registro : AppCompatActivity() {
     lateinit var pass: EditText
     lateinit var nombre: EditText
     lateinit var fecha: TextView
+    lateinit var edatEt :EditText
+    lateinit var poblacioEt :EditText
     lateinit var Registrar: Button
     lateinit var auth: FirebaseAuth //FIREBASE AUTENTIFICACIO
 
@@ -36,6 +38,8 @@ class Registro : AppCompatActivity() {
         pass = findViewById<EditText>(R.id.pass)
         nombre = findViewById<EditText>(R.id.nombre)
         fecha = findViewById<TextView>(R.id.fecha)
+        edatEt =findViewById<EditText>(R.id.edatEt)
+        poblacioEt =findViewById<EditText>(R.id.poblacioEt)
         Registrar = findViewById<Button>(R.id.Registrar)
 
         val date = Calendar.getInstance().time
@@ -49,6 +53,8 @@ class Registro : AppCompatActivity() {
         pass.setTypeface(tf)
         nombre.setTypeface(tf)
         fecha.setTypeface(tf)
+        edatEt.setTypeface(tf)
+        poblacioEt.setTypeface(tf)
         Registrar.setTypeface(tf)
 
         //Instanciem el firebaseAuth
@@ -98,30 +104,30 @@ class Registro : AppCompatActivity() {
             var nombreString: String = nombre.getText().toString()
             var fechaString: String= fecha.getText().toString()
             var nivell: String = "1"
+            var edatString = edatEt.getText().toString()
+            var poblacioString = poblacioEt.getText().toString()
             var dadesJugador : HashMap<String,String> = HashMap<String, String>()
             dadesJugador.put ("Uid",uidString)
             dadesJugador.put ("Email",correoString)
             dadesJugador.put ("Password",passString)
             dadesJugador.put ("Nom",nombreString)
             dadesJugador.put ("Data",fechaString)
+            dadesJugador.put ("Edat",edatString)
+            dadesJugador.put ("Poblacio",poblacioString)
+            dadesJugador.put ("Imatge","")
             dadesJugador.put ("Puntuacio", puntuacio.toString())
             dadesJugador.put ("Nivell", nivell)
             // Creem un punter a la base de dades i li donem un nom
             var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
             var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
-            if(reference!=null) {
-                //crea un fill amb els valors de dadesJugador
-                //Log.i ("MYTAG", reference.toString())
-                //Log.i ("MYTAG", uidString)
-                //Log.i ("MYTAG", dadesJugador.toString())
-                reference.child(uidString).setValue(dadesJugador)
-                Toast.makeText(this, "USUARI BEN REGISTRAT", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, Menu::class.java)
-                startActivity(intent)
-            }
-            else{
-                Toast.makeText(this, "ERROR BD", Toast.LENGTH_SHORT).show()
-            }
+            //crea un fill amb els valors de dadesJugador
+            //Log.i ("MYTAG", reference.toString())
+            //Log.i ("MYTAG", uidString)
+            //Log.i ("MYTAG", dadesJugador.toString())
+            reference.child(uidString).setValue(dadesJugador)
+            Toast.makeText(this, "USUARI BEN REGISTRAT", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, Menu::class.java)
+            startActivity(intent)
             finish()
         }
         else

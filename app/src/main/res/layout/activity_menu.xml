@@ -32,10 +32,10 @@
             android:gravity="center"/>
         <!-- Imatge alien -->
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/fireworks"
-            android:src="@drawable/fireworks" />
+            android:src="@drawable/userimage" />
         <!-- uid -->
         <TextView
             android:layout_width="match_parent"
@@ -52,6 +52,23 @@
             android:id="@+id/correo2"
             android:text="@string/correo2"
             android:gravity="center"/>
+        <!-- edat -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edat"
+            android:textSize="15sp"
+            android:text="@string/edat"
+            android:gravity="center"/>
+        <!-- Població -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/poblacio"
+            android:textSize="15sp"
+            android:text="@string/poblacio"
+            android:gravity="center"/>
+
         <!-- nom -->
         <TextView
             android:layout_width="match_parent"
@@ -70,6 +87,17 @@
             android:text="@string/jugarBtn"
             android:layout_marginTop="10dp"
             />
+        <!-- Boto d’Editar -->
+        <Button
+            android:background="@drawable/botopropi"
+            android:textColor="@color/white"
+            android:id="@+id/editarBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/editarBtn"
+            android:layout_marginTop="10dp"
+            />
+
         <!-- BOTO DE puntuacions -->
         <Button
             android:id="@+id/PuntuacionsBtn"

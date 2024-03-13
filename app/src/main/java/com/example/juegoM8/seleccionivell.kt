@@ -58,15 +58,45 @@ class seleccionivell : AppCompatActivity() {
             imageButton3.isEnabled=true
             imageButton3.visibility =View.VISIBLE
         }
-        imageButton1.setOnClickListener(){
+        if (NIVELL == "4"){
+            imageButton1.isEnabled=true
+            imageButton1.visibility =View.VISIBLE
+            imageButton2.isEnabled=true
+            imageButton2.visibility =View.VISIBLE
+            imageButton3.isEnabled=true
+            imageButton3.visibility =View.VISIBLE
+        }
+
+        imageButton1.setOnClickListener {
             val intent = Intent(this, Nivel1::class.java)
-            intent.putExtra("UID",UID)
-            intent.putExtra("NOM",NOM)
-            intent.putExtra("PUNTUACIO",PUNTUACIO)
-            intent.putExtra("NIVELL",NIVELL)
+            intent.putExtra("UID", UID)
+            intent.putExtra("NOM", NOM)
+            intent.putExtra("PUNTUACIO", PUNTUACIO)
+            intent.putExtra("NIVELL", NIVELL)
             startActivity(intent)
             finish()
         }
+
+        imageButton2.setOnClickListener {
+            val intent = Intent(this, Nivel2::class.java)
+            intent.putExtra("UID", UID)
+            intent.putExtra("NOM", NOM)
+            intent.putExtra("PUNTUACIO", PUNTUACIO)
+            intent.putExtra("NIVELL", NIVELL)
+            startActivity(intent)
+            finish()
+        }
+
+        imageButton3.setOnClickListener {
+            val intent = Intent(this, Nivel3::class.java)
+            intent.putExtra("UID", UID)
+            intent.putExtra("NOM", NOM)
+            intent.putExtra("PUNTUACIO", PUNTUACIO)
+            intent.putExtra("NIVELL", NIVELL)
+            startActivity(intent)
+            finish()
+        }
+
 
     }
 }

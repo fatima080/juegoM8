@@ -11,6 +11,8 @@
     <string name="passLogin">Password</string>
     <string name="BtnLogin">ENTRAR</string>
     <string name="tancarSessio">Tancar Sessió</string>
+    <string name="edatEt">Edat</string>
+    <string name="poblacioEt">Població</string>
 
     <string name="miPuntuaciotxt">Puntuació</string>
     <string name="puntuacio"> -- </string>
@@ -24,5 +26,7 @@
     <string name="continuarBtn">Continuar</string>
     <string name="movimientos">MOVIMIENTOS</string>
     <string name="puntos">--</string>
-
+    <string name="edat"> -- </string>
+    <string name="poblacio"> -- </string>
+    <string name="editarBtn">Canviar Imatge</string>
 </resources>
