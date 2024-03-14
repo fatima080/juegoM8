@@ -301,38 +301,56 @@ class Menu : AppCompatActivity() {
         return Uri.parse(path)
     }
 
-    private fun pujarFoto (imatgeUri: Uri) {
+    private fun pujarFoto(imatgeUri: Uri) {
         try {
             var folderReference: StorageReference =
                 storageReference.child("FotosPerfil")
-            var Uids: String = uid.getText().toString()
-            //Podriem fer:
-            //folderReference.child(Uids).putFile(imatgeUri)
-            //Pero utilitzem el mètode recomanat a la documentació
-            // https://firebase.google.com/docs/storage/android/uploadfiles
-            // Get the data from an ImageView as bytes
-            imatgePerfil.isDrawingCacheEnabled = true
-            imatgePerfil.buildDrawingCache()
-            val bitmap = (imatgePerfil.drawable as BitmapDrawable).bitmap
-            val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-            val data = baos.toByteArray()
-            var uploadTask = folderReference.child(Uids).putBytes(data)
-            uploadTask.addOnFailureListener {
-                // Handle unsuccessful uploads
-                Toast.makeText(
-                    this, "Error enviant imatge a Storage",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }.addOnSuccessListener { taskSnapshot ->
-                // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-                // ...
+            var Uids: String = uid.text.toString()
+
+            // Subir la imagen al Storage de Firebase
+            val uploadTask = folderReference.child(Uids).putFile(imatgeUri)
+
+            // Listener para saber cuando se completa la subida de la imagen
+            uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                // Continuar con la operación para obtener la URL de la imagen
+                folderReference.child(Uids).downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Obtener la URL de la imagen
+                    val downloadUri = task.result
+                    // Guardar la URL de la imagen en la variable imatge
+                    var imatge = downloadUri.toString()
+                    // Actualizar el campo "Imatge" en la base de datos
+                    var database: FirebaseDatabase =
+                        FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
+                    var reference: DatabaseReference =
+                        database.getReference("DATA BASE JUGADORS")
+                    reference.child(Uids).child("Imatge").setValue(imatge)
+                    // Notificar al usuario que la imagen se ha subido correctamente
+                    Toast.makeText(
+                        this, "Imagen subida correctamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    // Handle failures
+                    Toast.makeText(
+                        this, "Error subiendo la imagen",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
+
         } catch (e: Exception) {
             Log.e("ERROR", "Error al subir la imagen: ${e.message}", e)
             Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     //----------------------------------------Permisos----------------

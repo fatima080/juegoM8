@@ -10,6 +10,9 @@ import android.widget.ImageButton
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.SoundPool
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -26,6 +29,9 @@ private var NIVELL: String=""
 
 class Nivel1 : AppCompatActivity() {
 
+    var soundPool: SoundPool? = null
+    var movimientoSoundId=0
+    var victoriaSoundId=0
     private val COLUMNAS = 3
     private var botonpulsado1 : Int=0;
     private var botonpulsado2 : Int=0;
@@ -53,6 +59,7 @@ class Nivel1 : AppCompatActivity() {
             finish()
         }
         inicializar()
+        inicializarSoundPool()
         mezclar()
         mostrar()
     }
@@ -155,7 +162,10 @@ class Nivel1 : AppCompatActivity() {
             movimientos++
             movimientosText.text = movimientos.toString()
 
-            final()
+            //final()
+            if (!final()){ //para que no se solapen el sonido del movimiento y el de victoria
+                reproducirSonido("movimiento")
+            }
         }
     }
 
@@ -189,12 +199,13 @@ class Nivel1 : AppCompatActivity() {
         return resuelto
     }
 
-    private fun final(){
+    private fun final(): Boolean{
         var exito=estaResuelto()
         if (exito){
             Log.i("resolucion", "si")
             finalNivell()
         }
+        return exito;
     }
     private fun finalNivell(){
         var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
@@ -207,6 +218,7 @@ class Nivel1 : AppCompatActivity() {
         ocultarbotones()
         var fondo:ImageView = findViewById(R.id.fondoniveles)
         fondo.setImageResource(R.drawable.win)
+        reproducirSonido("victoria")
         //grava les dades del jugador (puntuació, nivell i Data)
         //accedint directament al punt del arbre de dades que volem anar, podem modificar
         //només una de les dades sense que calgui canviar tots els camps: nom, email...
@@ -233,6 +245,42 @@ class Nivel1 : AppCompatActivity() {
         for (button in buttons){
             button.visibility=View.INVISIBLE
         }
+    }
+
+    private fun inicializarSoundPool() {
+        soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val audioAttributes = AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+            SoundPool.Builder()
+                .setMaxStreams(2)
+                .setAudioAttributes(audioAttributes)
+                .build()
+        } else {
+            SoundPool(2, AudioManager.STREAM_MUSIC, 0)
+        }
+
+        // Cargar los sonidos en el SoundPool
+        movimientoSoundId = soundPool!!.load(this, R.raw.movimiento, 1)
+        victoriaSoundId = soundPool!!.load(this, R.raw.happyend, 1)
+    }
+    private fun reproducirSonido(evento: String){
+        when (evento) {
+            "movimiento" -> {
+                // Reproducir el sonido de movimiento
+                soundPool?.play(movimientoSoundId, 1.0f, 1.0f, 0, 0, 1.0f)
+            }
+            "victoria" -> {
+                // Reproducir el sonido de victoria
+                soundPool?.play(victoriaSoundId, 1.0f, 1.0f, 0, 0, 1.0f)
+            }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        // Liberar el SoundPool cuando la actividad se destruya
+        soundPool?.release()
     }
 
 }
