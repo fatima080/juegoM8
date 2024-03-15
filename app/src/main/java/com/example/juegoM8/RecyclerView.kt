@@ -17,12 +17,6 @@ import com.google.firebase.storage.FirebaseStorage
 
 class RecyclerView : AppCompatActivity() {
 
-    /*val jugadors = listOf<Jugador>(
-        Jugador("Pepe","12","https://www.kasandbox.org/programming-images/avatars/piceratops-tree.png"),
-        Jugador("Juan","20","https://www.kasandbox.org/programming-images/avatars/leafers-seed.png"),
-        Jugador("Luis","15","https://www.kasandbox.org/programming-images/avatars/leaf-yellow.png"),
-        Jugador("Jorge","32","https://www.kasandbox.org/programming-images/avatars/leaf-blue.png"),
-    )*/
     private lateinit var dbref: DatabaseReference
     private lateinit var jugadorArrayList: ArrayList<Jugador>
     private lateinit var jugadorRecyclerView: RecyclerView
@@ -42,12 +36,17 @@ class RecyclerView : AppCompatActivity() {
     }
 
     private fun getJugadorData() {
-        dbref = FirebaseDatabase.getInstance().getReference("DATA BASE JUGADORS")
+        dbref = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/").getReference("DATA BASE JUGADORS")
         dbref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    jugadorArrayList.clear() // Limpiar la lista antes de agregar los datos
                     for (jugadorSnapshot in snapshot.children) {
-                        val nom = jugadorSnapshot.child("Nom").getValue(String::class.java)
+                        val jugador = jugadorSnapshot.getValue(Jugador::class.java)
+                        jugador?.let {
+                            jugadorArrayList.add(it) // Agregar el jugador a la lista
+                        }
+                        /*val nom = jugadorSnapshot.child("Nom").getValue(Jugador::class.java)
                         val puntuacio = jugadorSnapshot.child("Puntuacio").getValue(String::class.java)
                         val imatgeUrl = jugadorSnapshot.child("Imatge").getValue(String::class.java) // URL de la imagen en Firebase Storage
 
@@ -70,8 +69,11 @@ class RecyclerView : AppCompatActivity() {
                             jugadorRecyclerView.adapter?.notifyDataSetChanged()
                         }.addOnFailureListener {
                             // Manejar cualquier error de descarga de imagen
-                        }
+                        }*/
                     }
+                    // Ordenar la lista de jugadores por puntuación en orden descendente
+                    jugadorArrayList.sortByDescending { it.Puntuacio.toIntOrNull() ?: 0 }
+                    jugadorRecyclerView.adapter = JugadorsAdapter(jugadorArrayList)
                 }
             }
 

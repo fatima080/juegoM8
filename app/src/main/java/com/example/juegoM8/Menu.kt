@@ -85,6 +85,8 @@ class Menu : AppCompatActivity() {
         correo.setTypeface(tf)
         nom.setTypeface(tf)
         editarBtn.setTypeface(tf)
+        poblacio.setTypeface(tf)
+        edat.setTypeface(tf)
         //fem el mateix amb el text dels botons
         tancarSessio.setTypeface(tf)
         CreditsBtn.setTypeface(tf)
