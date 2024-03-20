@@ -26,19 +26,20 @@ private var NOM: String =""
 private var PUNTUACIO: String=""
 private var UID: String=""
 private var NIVELL: String=""
-//lateinit var tf: Typeface
 
 class Nivel2 : AppCompatActivity() {
-
     var soundPool: SoundPool? = null
     var movimientoSoundId=0
     var victoriaSoundId=0
 
     private val COLUMNAS = 3
     private val FILAS = 4
+    private val puntajeBase = 500
     private var botonpulsado1 : Int=0;
     private var botonpulsado2 : Int=0;
     private var movimientos: Int=0;
+    lateinit var movimientosText :TextView
+    lateinit var stringMov : TextView
     lateinit var continuarBtn: Button
     private lateinit var graella: Array<String>
 
@@ -51,6 +52,8 @@ class Nivel2 : AppCompatActivity() {
         PUNTUACIO = intent?.get("PUNTUACIO").toString()
         NIVELL = intent?.get("NIVELL").toString()
         val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
+        stringMov = findViewById(R.id.movimientos)
+        movimientosText = findViewById(R.id.puntos)
         continuarBtn = findViewById(R.id.continuarBtn)
         continuarBtn.setTypeface(tf)
         continuarBtn.visibility = View.INVISIBLE
@@ -163,7 +166,6 @@ class Nivel2 : AppCompatActivity() {
             movimientos++
             movimientosText.text = movimientos.toString()
 
-            //final()
             if (!final()){
                 reproducirSonido("movimiento")
             }
@@ -206,10 +208,13 @@ class Nivel2 : AppCompatActivity() {
             Log.i("resolucion", "si")
             finalNivell()
         }
-        return exito;
+        return exito
     }
     private fun finalNivell(){
-        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
+        val puntuacionFinal = calcularPuntuacionFinal(movimientos)
+        stringMov.text= getString(R.string.puntuacioMayus)
+        movimientosText.text = puntuacionFinal.toString()
+        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
         var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
         //captura la data
         val date = Calendar.getInstance().time
@@ -224,7 +229,7 @@ class Nivel2 : AppCompatActivity() {
         //accedint directament al punt del arbre de dades que volem anar, podem modificar
         //només una de les dades sense que calgui canviar tots els camps: nom, email...
 
-        reference.child(UID).child("Puntuacio").setValue((PUNTUACIO.toInt()+movimientos).toString())
+        reference.child(UID).child("Puntuacio").setValue((PUNTUACIO.toInt()+puntuacionFinal).toString())
         reference.child(UID).child("Nivell").setValue(nivell)
         reference.child(UID).child("Data").setValue(formatedDate)
 
@@ -279,6 +284,18 @@ class Nivel2 : AppCompatActivity() {
                 soundPool?.play(victoriaSoundId, 1.0f, 1.0f, 0, 0, 1.0f)
             }
         }
+    }
+    fun calcularPuntuacionFinal(movimientos: Int): Int {
+        // Restar una cierta cantidad de puntos por cada movimiento
+        val puntosPorMovimiento = 10
+        val puntosDescontados = movimientos * puntosPorMovimiento
+        // Calcular la puntuación final
+        var puntuacionFinal = puntajeBase - puntosDescontados
+        // Asegurarse de que la puntuación final no sea negativa
+        if (puntuacionFinal < 0) {
+            puntuacionFinal = 0
+        }
+        return puntuacionFinal
     }
     override fun onDestroy() {
         super.onDestroy()

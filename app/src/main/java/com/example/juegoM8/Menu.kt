@@ -42,6 +42,7 @@ class Menu : AppCompatActivity() {
     lateinit var PuntuacionsBtn: Button
     lateinit var jugarBtn: Button
     lateinit var editarBtn: Button
+    lateinit var passBtn: Button
     lateinit var miPuntuaciotxt: TextView
     lateinit var puntuacio: TextView
     lateinit var uid: TextView
@@ -56,6 +57,7 @@ class Menu : AppCompatActivity() {
     lateinit var storageReference: StorageReference
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -63,6 +65,7 @@ class Menu : AppCompatActivity() {
         CreditsBtn =findViewById<Button>(R.id.CreditsBtn)
         PuntuacionsBtn =findViewById<Button>(R.id.PuntuacionsBtn)
         jugarBtn =findViewById<Button>(R.id.jugarBtn)
+        passBtn = findViewById<Button>(R.id.cambiaPass)
         val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
         auth= FirebaseAuth.getInstance()
         user =auth.currentUser
@@ -104,6 +107,8 @@ class Menu : AppCompatActivity() {
 
         CreditsBtn.setOnClickListener(){
             Toast.makeText(this,"Credits", Toast.LENGTH_SHORT).show()
+            val intent = Intent (this, Credits::class.java)
+            startActivity(intent)
         }
         PuntuacionsBtn.setOnClickListener(){
             Toast.makeText(this,"Puntuacions", Toast.LENGTH_SHORT).show()
@@ -123,6 +128,9 @@ class Menu : AppCompatActivity() {
             intent.putExtra("NIVELL",nivells)
             startActivity(intent)
             finish()
+        }
+        passBtn.setOnClickListener(){
+            cambiaContrasena()
         }
 
 
@@ -154,7 +162,7 @@ class Menu : AppCompatActivity() {
         finish()
     }
     private fun consulta(){
-        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
+        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
         var bdreference:DatabaseReference = database.getReference("DATA BASE JUGADORS")
         bdreference.addValueEventListener (object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -203,7 +211,7 @@ class Menu : AppCompatActivity() {
 
     private fun canviaLaImatge() {
         //utilitzarem un alertdialog que seleccionara de galeria o agafar una foto
-                // Si volem fer un AlertDialog amb més de dos elements (amb una llista),
+        // Si volem fer un AlertDialog amb més de dos elements (amb una llista),
         // Aixó ho fariem amb fragments (que veurem més endevant)
         // Aquí hi ha un tutorial per veure com es fa:
         // https://www.codevscolor.com/android-kotlin-list-alert-dialog
@@ -215,20 +223,20 @@ class Menu : AppCompatActivity() {
                 Toast.makeText(this, "De galeria",
                     Toast.LENGTH_SHORT).show()
                 //mirem primer si tenim permisos per a accedir a Read External Storage
-                        if (askForPermissions()) {
-                            // Permissions are already granted, do your stuff
-                            // Ara agafarem una imatge de la galeria
-                            val intent = Intent(Intent.ACTION_PICK)
-                            val REQUEST_CODE=201 //Aquest codi és un número que faremservir per
-                            // a identificar el que hem recuperat del intent
-                                    // pot ser qualsevol número
-                                    intent.type = "image/*"
-                            startActivityForResult(intent, REQUEST_CODE)
-                        }
-                        else{
-                            Toast.makeText(this, "ERROR PERMISOS",
-                                Toast.LENGTH_SHORT).show()
-                        }
+                if (askForPermissions()) {
+                    // Permissions are already granted, do your stuff
+                    // Ara agafarem una imatge de la galeria
+                    val intent = Intent(Intent.ACTION_PICK)
+                    val REQUEST_CODE=201 //Aquest codi és un número que faremservir per
+                    // a identificar el que hem recuperat del intent
+                    // pot ser qualsevol número
+                    intent.type = "image/*"
+                    startActivityForResult(intent, REQUEST_CODE)
+                }
+                else{
+                    Toast.makeText(this, "ERROR PERMISOS",
+                        Toast.LENGTH_SHORT).show()
+                }
             }
             .setPositiveButton("Càmera") { view, _ ->
                 if (checkCameraPermissions()) {
@@ -274,12 +282,13 @@ class Menu : AppCompatActivity() {
             imatgePerfil.setImageURI(imatgeUri)
             pujarFoto(imatgeUri)
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.i ("camara", "ha entrado")
             // La imagen de la cámara se almacena en el intent y se puede obtener como un extra llamado "data"
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
             // Convierte el Bitmap en un Uri
             val tempUri = getImageUri(applicationContext, imageBitmap)
-
+            Log.i ("camara", tempUri.toString())
             imatgePerfil.setImageURI(tempUri)
             pujarFoto(tempUri)
         } else {
@@ -292,6 +301,8 @@ class Menu : AppCompatActivity() {
 
     // Función para obtener el Uri de un Bitmap
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
+        Log.i ("camara", "ha entrado2")
+
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(
@@ -329,7 +340,7 @@ class Menu : AppCompatActivity() {
                     var imatge = downloadUri.toString()
                     // Actualizar el campo "Imatge" en la base de datos
                     var database: FirebaseDatabase =
-                        FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
+                        FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
                     var reference: DatabaseReference =
                         database.getReference("DATA BASE JUGADORS")
                     reference.child(Uids).child("Imatge").setValue(imatge)
@@ -350,6 +361,36 @@ class Menu : AppCompatActivity() {
         } catch (e: Exception) {
             Log.e("ERROR", "Error al subir la imagen: ${e.message}", e)
             Toast.makeText(this, "Error al subir la imagen", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun cambiaContrasena(){
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            val email = user.email
+            email?.let {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            // Email de reinicio de contraseña enviado con éxito
+                            val dialog = AlertDialog.Builder(this)
+                                .setTitle("CANVIAR CONTRASEÑA")
+                                .setMessage("Se le ha enviado un correo para cambiar su contraseña")
+                                .setNegativeButton("Aceptar") { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                .setCancelable(false)
+                                .create()
+                            dialog.show()
+                        } else {
+                            // Error al enviar el correo electrónico de reinicio de contraseña
+                            Toast.makeText(
+                                this,
+                                "Error al enviar el correo electrónico para restablecer la contraseña.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+            }
         }
     }
 
@@ -394,14 +435,14 @@ class Menu : AppCompatActivity() {
             .setTitle("Permission Denied")
             .setMessage("Permission is denied, Please allow permissions from App Settings.")
             .setPositiveButton("App Settings", DialogInterface.OnClickListener { dialogInterface, i ->
-                        // send to app settings if permission is denied permanently
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        val uri = Uri.fromParts("package", getPackageName(), null)
-                        intent.data = uri
-                        startActivity(intent)
-                    })
-                .setNegativeButton("Cancel",null).show()
+                // send to app settings if permission is denied permanently
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts("package", getPackageName(), null)
+                intent.data = uri
+                startActivity(intent)
+            })
+            .setNegativeButton("Cancel",null).show()
     }
 //----------------------------------------------------------------
 

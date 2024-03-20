@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MazeMaster</string>
+    <string name="login">Login</string>
+    <string name="registro">Registro</string>
+    <string name="correo">E-mail</string>
+    <string name="nombre">Nombre</string>
+    <string name="pass">Contraseña</string>
+    <string name="fecha">Fecha</string>
+    <string name="Registrar">REGISTRAR</string>
+    <string name="correoLogin">E-mail</string>
+    <string name="passLogin">Contraseña</string>
+    <string name="BtnLogin">ENTRAR</string>
+    <string name="tancarSessio">Cerrar Sesión</string>
+    <string name="edatEt">Edad</string>
+    <string name="poblacioEt">Población</string>
+    <string name="miPuntuaciotxt">Puntuación</string>
+    <string name="puntuacio">--</string>
+    <string name="uid">--</string>
+    <string name="correo2">--</string>
+    <string name="nom">--</string>
+    <string name="MenuTxt">MENÚ</string>
+    <string name="jugarBtn">Jugar</string>
+    <string name="PuntuacionsBtn">Puntuaciones</string>
+    <string name="CreditsBtn">Créditos</string>
+    <string name="continuarBtn">Continuar</string>
+    <string name="movimientos">MOVIMIENTOS</string>
+    <string name="puntos">--</string>
+    <string name="edat">--</string>
+    <string name="poblacio">--</string>
+    <string name="editarBtn">Cambiar Imagen</string>
+    <string name="cambiaPassBtn">Cambiar Contraseña</string>
+    <string name="puntuacioMayus">PUNTUACIÓN</string>
+</resources>

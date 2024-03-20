@@ -36,9 +36,11 @@ class Nivel1 : AppCompatActivity() {
     private var botonpulsado1 : Int=0;
     private var botonpulsado2 : Int=0;
     private var movimientos: Int=0;
+    private val puntajeBase = 300
     lateinit var continuarBtn: Button
     private lateinit var graella: Array<String>
-    //val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
+    lateinit var movimientosText :TextView
+    lateinit var stringMov : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +50,10 @@ class Nivel1 : AppCompatActivity() {
         NOM = intent?.get("NOM").toString()
         PUNTUACIO = intent?.get("PUNTUACIO").toString()
         NIVELL = intent?.get("NIVELL").toString()
-        continuarBtn = findViewById(R.id.continuarBtn)
         val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
+        stringMov = findViewById(R.id.movimientos)
+        movimientosText = findViewById(R.id.puntos)
+        continuarBtn = findViewById(R.id.continuarBtn)
         continuarBtn.setTypeface(tf)
         continuarBtn.visibility = View.INVISIBLE
         continuarBtn.setOnClickListener(){
@@ -130,7 +134,6 @@ class Nivel1 : AppCompatActivity() {
     private fun intercambiarImagenesSiAdyacentes(boton1: Int, boton2: Int) {
         val imageButton1 = findViewById<ImageButton>(boton1)
         val imageButton2 = findViewById<ImageButton>(boton2)
-        val movimientosText = findViewById<TextView>(R.id.puntos)
         val posicion1 = imageButton1.tag as Int
         val posicion2 = imageButton2.tag as Int
 
@@ -162,7 +165,6 @@ class Nivel1 : AppCompatActivity() {
             movimientos++
             movimientosText.text = movimientos.toString()
 
-            //final()
             if (!final()){ //para que no se solapen el sonido del movimiento y el de victoria
                 reproducirSonido("movimiento")
             }
@@ -190,6 +192,7 @@ class Nivel1 : AppCompatActivity() {
 
     private fun estaResuelto(): Boolean {
         var resuelto = true
+        //miramos que los índices y el indice del array coincidan, así sabremos si está ordenado
         for (i in graella.indices) {
             if (graella[i] != i.toString()) {
                 resuelto = false
@@ -205,10 +208,13 @@ class Nivel1 : AppCompatActivity() {
             Log.i("resolucion", "si")
             finalNivell()
         }
-        return exito;
+        return exito
     }
     private fun finalNivell(){
-        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
+        val puntuacionFinal = calcularPuntuacionFinal(movimientos)
+        stringMov.text= getString(R.string.puntuacioMayus)
+        movimientosText.text = puntuacionFinal.toString()
+        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
         var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
         //captura la data
         val date = Calendar.getInstance().time
@@ -223,7 +229,7 @@ class Nivel1 : AppCompatActivity() {
         //accedint directament al punt del arbre de dades que volem anar, podem modificar
         //només una de les dades sense que calgui canviar tots els camps: nom, email...
 
-        reference.child(UID).child("Puntuacio").setValue(movimientos.toString())
+        reference.child(UID).child("Puntuacio").setValue(puntuacionFinal.toString())
         reference.child(UID).child("Nivell").setValue(nivell)
         reference.child(UID).child("Data").setValue(formatedDate)
 
@@ -246,7 +252,6 @@ class Nivel1 : AppCompatActivity() {
             button.visibility=View.INVISIBLE
         }
     }
-
     private fun inicializarSoundPool() {
         soundPool = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val audioAttributes = AudioAttributes.Builder()
@@ -276,6 +281,18 @@ class Nivel1 : AppCompatActivity() {
                 soundPool?.play(victoriaSoundId, 1.0f, 1.0f, 0, 0, 1.0f)
             }
         }
+    }
+    fun calcularPuntuacionFinal(movimientos: Int): Int {
+        // Restar una cierta cantidad de puntos por cada movimiento
+        val puntosPorMovimiento = 10
+        val puntosDescontados = movimientos * puntosPorMovimiento
+        // Calcular la puntuación final
+        var puntuacionFinal = puntajeBase - puntosDescontados
+        // Asegurarse de que la puntuación final no sea negativa
+        if (puntuacionFinal < 0) {
+            puntuacionFinal = 0
+        }
+        return puntuacionFinal
     }
     override fun onDestroy() {
         super.onDestroy()

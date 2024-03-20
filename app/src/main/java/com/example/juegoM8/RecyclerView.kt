@@ -1,5 +1,6 @@
 package com.example.juegoM8
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +21,6 @@ class RecyclerView : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var jugadorArrayList: ArrayList<Jugador>
     private lateinit var jugadorRecyclerView: RecyclerView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,34 +46,31 @@ class RecyclerView : AppCompatActivity() {
                         jugador?.let {
                             jugadorArrayList.add(it) // Agregar el jugador a la lista
                         }
-                        /*val nom = jugadorSnapshot.child("Nom").getValue(Jugador::class.java)
-                        val puntuacio = jugadorSnapshot.child("Puntuacio").getValue(String::class.java)
-                        val imatgeUrl = jugadorSnapshot.child("Imatge").getValue(String::class.java) // URL de la imagen en Firebase Storage
 
-                        // Crear un objeto Jugador con los datos recuperados
-                        val jugador = Jugador(nom ?: "", puntuacio ?: "", imatgeUrl ?: "")
-                        jugadorArrayList.add(jugador)
-
-                        // Notificar al adaptador que los datos han cambiado
-                        jugadorRecyclerView.adapter?.notifyDataSetChanged()
-
-                        // Descargar la imagen de Firebase Storage y actualizar el ImageView cuando la descarga sea exitosa
-                        val storageRef = FirebaseStorage.getInstance().reference
-                        val imageRef = storageRef.child(imatgeUrl ?: "")
-                        val ONE_MEGABYTE: Long = 1024 * 1024
-                        imageRef.getBytes(ONE_MEGABYTE).addOnSuccessListener { imageData ->
-                            // Convertir los datos de la imagen en un Bitmap y establecerlo en el ImageView
-                            val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
-                            // Actualizar la imagen en el RecyclerView
-                            jugador.imatgeBitmap = bitmap
-                            jugadorRecyclerView.adapter?.notifyDataSetChanged()
-                        }.addOnFailureListener {
-                            // Manejar cualquier error de descarga de imagen
-                        }*/
                     }
+
+                    var adapter = JugadorsAdapter(jugadorArrayList)
+
                     // Ordenar la lista de jugadores por puntuación en orden descendente
                     jugadorArrayList.sortByDescending { it.Puntuacio.toIntOrNull() ?: 0 }
-                    jugadorRecyclerView.adapter = JugadorsAdapter(jugadorArrayList)
+                    jugadorRecyclerView.adapter = adapter
+                    adapter.setOnItemClickListener(object : JugadorsAdapter.OnItemClickListener{
+                        override fun onItemClick(position: Int) {
+                            Toast.makeText(this@RecyclerView, "Has clicat a .$position", Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(this@RecyclerView, DetalleJugador::class.java)
+                            intent.putExtra("Nom", jugadorArrayList[position].Nom)
+                            intent.putExtra("Puntuacio", jugadorArrayList[position].Puntuacio)
+                            intent.putExtra("Imatge", jugadorArrayList[position].Imatge)
+                            intent.putExtra("Data", jugadorArrayList[position].Data)
+                            intent.putExtra("Edat", jugadorArrayList[position].Edat)
+                            intent.putExtra("Email", jugadorArrayList[position].Email)
+                            intent.putExtra("Poblacio", jugadorArrayList[position].Poblacio)
+                            startActivity(intent) // Iniciar la actividad
+
+                        }
+
+                    })
                 }
             }
 
