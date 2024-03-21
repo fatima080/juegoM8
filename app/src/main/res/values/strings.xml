@@ -31,4 +31,11 @@
     <string name="poblacio"> -- </string>
     <string name="editarBtn">Canviar Imatge</string>
     <string name="cambiaPassBtn">Canviar Contrasenya</string>
+    <string name="cambiar_contrasena_title">CANVIAR CONTRASENYA</string>
+    <string name="cambiar_contrasena_message">Se li ha enviat un correu per canviar la contrasenya</string>
+    <string name="boton_aceptar">Acceptar</string>
+    <string name="cambiar_imatge_title">CANVIAR IMATGE</string>
+    <string name="seleccionar_imatge_message">Seleccionar imatge de: </string>
+    <string name="boton_galeria">Galeria</string>
+    <string name="boton_camera">Càmera</string>
 </resources>

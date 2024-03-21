@@ -33,6 +33,8 @@ class Registro : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registro)
+        //Instanciem el firebaseAuth
+        auth = FirebaseAuth.getInstance()
 
         correo = findViewById<EditText>(R.id.correo)
         pass = findViewById<EditText>(R.id.pass)
@@ -57,8 +59,7 @@ class Registro : AppCompatActivity() {
         poblacioEt.setTypeface(tf)
         Registrar.setTypeface(tf)
 
-        //Instanciem el firebaseAuth
-        auth = FirebaseAuth.getInstance()
+
 
         Registrar.setOnClickListener {
             //Abans de fer el registre validem les dades
@@ -79,7 +80,8 @@ class Registro : AppCompatActivity() {
 
     }
     fun RegistrarJugador(email: String, passw: String) {
-        auth.createUserWithEmailAndPassword(email, passw)  // Corregir aquí
+        //esta función registra el usuario en el servicio de autentificación de Firebase
+        auth.createUserWithEmailAndPassword(email, passw)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
@@ -94,13 +96,12 @@ class Registro : AppCompatActivity() {
             }
     }
     fun updateUI(user: FirebaseUser?){
-        //hi ha un interrogant perquè podria ser null
+        //y aquí lo guardamos en la base de datos
         if (user!=null)
         {
             var puntuacio: Int = 0
             var uidString: String = user.uid
             var correoString: String = correo.getText().toString()
-            var passString: String = pass.getText().toString()
             var nombreString: String = nombre.getText().toString()
             var fechaString: String= fecha.getText().toString()
             var nivell: String = "1"
@@ -109,7 +110,6 @@ class Registro : AppCompatActivity() {
             var dadesJugador : HashMap<String,String> = HashMap<String, String>()
             dadesJugador.put ("Uid",uidString)
             dadesJugador.put ("Email",correoString)
-            dadesJugador.put ("Password",passString)
             dadesJugador.put ("Nom",nombreString)
             dadesJugador.put ("Data",fechaString)
             dadesJugador.put ("Edat",edatString)
@@ -121,9 +121,6 @@ class Registro : AppCompatActivity() {
             var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
             var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
             //crea un fill amb els valors de dadesJugador
-            //Log.i ("MYTAG", reference.toString())
-            //Log.i ("MYTAG", uidString)
-            //Log.i ("MYTAG", dadesJugador.toString())
             reference.child(uidString).setValue(dadesJugador)
             Toast.makeText(this, "USUARI BEN REGISTRAT", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, Menu::class.java)

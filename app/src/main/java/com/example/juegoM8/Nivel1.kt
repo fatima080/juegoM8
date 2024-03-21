@@ -13,6 +13,7 @@ import android.graphics.Typeface
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -214,27 +215,29 @@ class Nivel1 : AppCompatActivity() {
         val puntuacionFinal = calcularPuntuacionFinal(movimientos)
         stringMov.text= getString(R.string.puntuacioMayus)
         movimientosText.text = puntuacionFinal.toString()
-        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
+        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
         var reference: DatabaseReference = database.getReference("DATA BASE JUGADORS")
         //captura la data
         val date = Calendar.getInstance().time
         val formatter = SimpleDateFormat.getDateInstance()
         val formatedDate = formatter.format(date)
-        var nivell : String ="2"
-        ocultarbotones()
-        var fondo:ImageView = findViewById(R.id.fondoniveles)
-        fondo.setImageResource(R.drawable.win)
-        reproducirSonido("victoria")
         //grava les dades del jugador (puntuació, nivell i Data)
         //accedint directament al punt del arbre de dades que volem anar, podem modificar
         //només una de les dades sense que calgui canviar tots els camps: nom, email...
 
-        reference.child(UID).child("Puntuacio").setValue(puntuacionFinal.toString())
-        reference.child(UID).child("Nivell").setValue(nivell)
-        reference.child(UID).child("Data").setValue(formatedDate)
+        // Utilizar un Handler para retrasar el cambio de imagen de victoria
+        Handler().postDelayed({
+            var nivell : String ="2"
+            ocultarbotones()
+            var fondo:ImageView = findViewById(R.id.fondoniveles)
+            fondo.setImageResource(R.drawable.win)
+            reproducirSonido("victoria")
+            reference.child(UID).child("Puntuacio").setValue(puntuacionFinal.toString())
+            reference.child(UID).child("Nivell").setValue(nivell)
+            reference.child(UID).child("Data").setValue(formatedDate)
 
-
-        continuarBtn.visibility = View.VISIBLE
+            continuarBtn.visibility = View.VISIBLE
+        }, 1000)
     }
     private fun ocultarbotones(){
         val buttons = listOf(
@@ -293,6 +296,16 @@ class Nivel1 : AppCompatActivity() {
             puntuacionFinal = 0
         }
         return puntuacionFinal
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, seleccionivell::class.java)
+        intent.putExtra("UID", UID)
+        intent.putExtra("NOM", NOM)
+        intent.putExtra("PUNTUACIO", PUNTUACIO)
+        intent.putExtra("NIVELL", NIVELL)
+        startActivity(intent)
+        finish()
     }
     override fun onDestroy() {
         super.onDestroy()

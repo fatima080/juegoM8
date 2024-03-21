@@ -31,4 +31,11 @@
     <string name="editarBtn">Cambiar Imagen</string>
     <string name="cambiaPassBtn">Cambiar Contraseña</string>
     <string name="puntuacioMayus">PUNTUACIÓN</string>
+    <string name="cambiar_contrasena_title">CAMBIAR CONTRASEÑA</string>
+    <string name="cambiar_contrasena_message">Se le ha enviado un correo para cambiar la contraseña</string>
+    <string name="boton_aceptar">Aceptar</string>
+    <string name="cambiar_imatge_title">CAMBIAR IMAGEN</string>
+    <string name="seleccionar_imatge_message">Seleccionar una imagen de:</string>
+    <string name="boton_galeria">Galería</string>
+    <string name="boton_camera">Cámara</string>
 </resources>

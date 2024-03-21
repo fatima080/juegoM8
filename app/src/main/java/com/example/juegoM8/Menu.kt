@@ -57,19 +57,19 @@ class Menu : AppCompatActivity() {
     lateinit var storageReference: StorageReference
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
+        auth= FirebaseAuth.getInstance()
+        user =auth.currentUser //cogemos el usuario actual
+        //buscamos los botones
         tancarSessio =findViewById<Button>(R.id.tancarSessio)
         CreditsBtn =findViewById<Button>(R.id.CreditsBtn)
         PuntuacionsBtn =findViewById<Button>(R.id.PuntuacionsBtn)
         jugarBtn =findViewById<Button>(R.id.jugarBtn)
         passBtn = findViewById<Button>(R.id.cambiaPass)
-        val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
-        auth= FirebaseAuth.getInstance()
-        user =auth.currentUser
-        //busquem els textos
+        //buscamos los textos
         miPuntuaciotxt=findViewById(R.id.miPuntuaciotxt)
         puntuacio=findViewById(R.id.puntuacio)
         uid=findViewById(R.id.uid)
@@ -96,7 +96,9 @@ class Menu : AppCompatActivity() {
         PuntuacionsBtn.setTypeface(tf)
         jugarBtn.setTypeface(tf)
         passBtn.setTypeface(tf)
+        //la función consulta coge los datos del jugador para mostrarlos
         consulta()
+        //la llamamos aquí y onResume()
 
         tancarSessio.setOnClickListener(){
             tancalaSessio()
@@ -124,6 +126,8 @@ class Menu : AppCompatActivity() {
             var puntuacios : String = puntuacio.getText().toString()
             var nivells : String =nivell
             val intent= Intent(this, seleccionivell::class.java)
+            //tenemos que pasar estos datos a la siguiente activity para que pueda
+            //mostrar el nivel del jugador y actualizar sus puntos
             intent.putExtra("UID",Uids)
             intent.putExtra("NOM",noms)
             intent.putExtra("PUNTUACIO",puntuacios)
@@ -139,6 +143,7 @@ class Menu : AppCompatActivity() {
 
     }
     override fun onStart() {
+        //así miramos si ya hay un usuario logueado, si no te devuelve a la pantalla inicial
         usuariLogejat()
         super.onStart()
     }
@@ -211,6 +216,8 @@ class Menu : AppCompatActivity() {
         })
     }
 
+
+
     private fun canviaLaImatge() {
         //utilitzarem un alertdialog que seleccionara de galeria o agafar una foto
         // Si volem fer un AlertDialog amb més de dos elements (amb una llista),
@@ -219,9 +226,9 @@ class Menu : AppCompatActivity() {
         // https://www.codevscolor.com/android-kotlin-list-alert-dialog
         //Veiem com es crea un de dues opcions (habitualment acceptar o cancel·lar:
         val dialog = AlertDialog.Builder(this)
-            .setTitle("CANVIAR IMATGE")
-            .setMessage("Seleccionar imatge de: ")
-            .setNegativeButton("Galeria") { view, _ ->
+            .setTitle(getString(R.string.cambiar_imatge_title))
+            .setMessage(getString(R.string.seleccionar_imatge_message))
+            .setNegativeButton(getString(R.string.boton_galeria)) { view, _ ->
                 Toast.makeText(this, "De galeria",
                     Toast.LENGTH_SHORT).show()
                 //mirem primer si tenim permisos per a accedir a Read External Storage
@@ -240,7 +247,7 @@ class Menu : AppCompatActivity() {
                         Toast.LENGTH_SHORT).show()
                 }
             }
-            .setPositiveButton("Càmera") { view, _ ->
+            .setPositiveButton(getString(R.string.boton_camera)) { view, _ ->
                 if (checkCameraPermissions()) {
                     // Abrir la cámara
                     openCamera()
@@ -284,7 +291,6 @@ class Menu : AppCompatActivity() {
             imatgePerfil.setImageURI(imatgeUri)
             pujarFoto(imatgeUri)
         } else if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            Log.i ("camara", "ha entrado")
             // La imagen de la cámara se almacena en el intent y se puede obtener como un extra llamado "data"
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
@@ -303,8 +309,6 @@ class Menu : AppCompatActivity() {
 
     // Función para obtener el Uri de un Bitmap
     private fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
-        Log.i ("camara", "ha entrado2")
-
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(
@@ -375,9 +379,9 @@ class Menu : AppCompatActivity() {
                         if (task.isSuccessful) {
                             // Email de reinicio de contraseña enviado con éxito
                             val dialog = AlertDialog.Builder(this)
-                                .setTitle("CANVIAR CONTRASEÑA")
-                                .setMessage("Se le ha enviado un correo para cambiar su contraseña")
-                                .setNegativeButton("Aceptar") { dialog, _ ->
+                                .setTitle(getString(R.string.cambiar_contrasena_title))
+                                .setMessage(getString(R.string.cambiar_contrasena_message))
+                                .setNegativeButton(getString(R.string.boton_aceptar)) { dialog, _ ->
                                     dialog.dismiss()
                                 }
                                 .setCancelable(false)
@@ -446,7 +450,11 @@ class Menu : AppCompatActivity() {
             })
             .setNegativeButton("Cancel",null).show()
     }
-//----------------------------------------------------------------
+    override fun onResume() {
+        super.onResume()
+        // Llama a la función consulta para actualizar los datos del usuario cuando se vuelve a esta pantalla
+        consulta()
+    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.juegoM8
 
 import android.content.Intent
+import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -16,8 +17,10 @@ class Credits : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credits)
-        timer.scheduleAtFixedRate(TimeTask(),0L,6000L)
+        val tf = Typeface.createFromAsset(assets,"fonts/Pulang.ttf")
         menuBtn = findViewById<Button>(R.id.button22)
+        menuBtn.setTypeface(tf)
+        timer.scheduleAtFixedRate(TimeTask(),0L,3000L)
         menuBtn.setOnClickListener(){
             val intent = Intent (this, Menu::class.java)
             startActivity(intent)

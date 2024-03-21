@@ -52,6 +52,7 @@ class Login : AppCompatActivity() {
         }
     }
     private fun LogindeJugador(email: String, passw: String) {
+        //aquí mira en la autentificación de Firebase
         auth.signInWithEmailAndPassword(email, passw)
             .addOnCompleteListener(this)
             { task ->
@@ -59,6 +60,7 @@ class Login : AppCompatActivity() {
                     val tx: String = "Benvingut "+ email
                     Toast.makeText(this, tx, Toast.LENGTH_LONG).show()
                     val user = auth.currentUser
+                    //si tiene éxito va al menú
                     updateUI(user)
                 } else {
                     Toast.makeText(this, "ERROR Autentificació",

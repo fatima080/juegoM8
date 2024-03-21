@@ -31,4 +31,11 @@
     <string name="editarBtn">Cambiare foto</string>
     <string name="cambiaPassBtn">Cambiare Password</string>
     <string name="puntuacioMayus">PUNTEGGIO</string>
+    <string name="cambiar_contrasena_title">CAMBIARE PASSWORD</string>
+    <string name="cambiar_contrasena_message">Gli è stata inviata un\'e-mail per modificare la password</string>
+    <string name="boton_aceptar">Accettare</string>
+    <string name="cambiar_imatge_title">CAMBIARE FOTO</string>
+    <string name="seleccionar_imatge_message">Selezionare la foto da:</string>
+    <string name="boton_galeria">Galleria</string>
+    <string name="boton_camera">Camera</string>
 </resources>
