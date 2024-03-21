@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".Centro">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="INSTITUT CASTELLET" />
+        android:src="@drawable/centro"
+        android:scaleType="centerCrop"/>
 
 </FrameLayout>

@@ -95,6 +95,7 @@ class Menu : AppCompatActivity() {
         CreditsBtn.setTypeface(tf)
         PuntuacionsBtn.setTypeface(tf)
         jugarBtn.setTypeface(tf)
+        passBtn.setTypeface(tf)
         consulta()
 
         tancarSessio.setOnClickListener(){
@@ -109,6 +110,7 @@ class Menu : AppCompatActivity() {
             Toast.makeText(this,"Credits", Toast.LENGTH_SHORT).show()
             val intent = Intent (this, Credits::class.java)
             startActivity(intent)
+            finish()
         }
         PuntuacionsBtn.setOnClickListener(){
             Toast.makeText(this,"Puntuacions", Toast.LENGTH_SHORT).show()
@@ -162,7 +164,7 @@ class Menu : AppCompatActivity() {
         finish()
     }
     private fun consulta(){
-        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
+        var database: FirebaseDatabase = FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
         var bdreference:DatabaseReference = database.getReference("DATA BASE JUGADORS")
         bdreference.addValueEventListener (object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -340,7 +342,7 @@ class Menu : AppCompatActivity() {
                     var imatge = downloadUri.toString()
                     // Actualizar el campo "Imatge" en la base de datos
                     var database: FirebaseDatabase =
-                        FirebaseDatabase.getInstance("https://m8juego-e9538-default-rtdb.europe-west1.firebasedatabase.app/")
+                        FirebaseDatabase.getInstance("https://juegom8-d97f7-default-rtdb.firebaseio.com/")
                     var reference: DatabaseReference =
                         database.getReference("DATA BASE JUGADORS")
                     reference.child(Uids).child("Imatge").setValue(imatge)

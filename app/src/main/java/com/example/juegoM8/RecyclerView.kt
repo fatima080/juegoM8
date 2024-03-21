@@ -56,7 +56,7 @@ class RecyclerView : AppCompatActivity() {
                     jugadorRecyclerView.adapter = adapter
                     adapter.setOnItemClickListener(object : JugadorsAdapter.OnItemClickListener{
                         override fun onItemClick(position: Int) {
-                            Toast.makeText(this@RecyclerView, "Has clicat a .$position", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@RecyclerView, "Has clicat a ${jugadorArrayList[position].Nom}", Toast.LENGTH_SHORT).show()
 
                             val intent = Intent(this@RecyclerView, DetalleJugador::class.java)
                             intent.putExtra("Nom", jugadorArrayList[position].Nom)

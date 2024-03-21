@@ -16,7 +16,7 @@ class Credits : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_credits)
-        timer.scheduleAtFixedRate(TimeTask(),0L,3000L)
+        timer.scheduleAtFixedRate(TimeTask(),0L,6000L)
         menuBtn = findViewById<Button>(R.id.button22)
         menuBtn.setOnClickListener(){
             val intent = Intent (this, Menu::class.java)
@@ -29,20 +29,32 @@ class Credits : AppCompatActivity() {
             numeroFragment++
             if (numeroFragment>2) numeroFragment=1
             if (numeroFragment==1) {
-                supportFragmentManager.commit {
-                    replace<Centro>(R.id.fragmentcontainer)
-                    setReorderingAllowed(true)
-                    addToBackStack("replacement")
+                if (!supportFragmentManager.isStateSaved) {
+                    supportFragmentManager.commit {
+                        replace<Centro>(R.id.fragmentcontainer)
+                        setReorderingAllowed(true)
+                        addToBackStack("replacement")
+                    }
                 }
             }
             else {
-                supportFragmentManager.commit {
-                    replace<Alumnas>(R.id.fragmentcontainer)
-                    setReorderingAllowed(true)
-                    addToBackStack("replacement")
+                if (!supportFragmentManager.isStateSaved) {
+                    supportFragmentManager.commit {
+                        replace<Alumnas>(R.id.fragmentcontainer)
+                        setReorderingAllowed(true)
+                        addToBackStack("replacement")
+                    }
                 }
             }
         }
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        timer.cancel()
+    }
+
+
 
 }
